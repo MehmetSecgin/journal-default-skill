@@ -19,6 +19,16 @@ Share this repo URL and say:
 Install and use this repo as my default journaling policy. Run scripts/bootstrap_memory.sh, then enforce SKILL.md + UNIVERSAL_AGENT_PROMPT.md rules on meaningful tasks.
 ```
 
+## Open Source Collaboration
+- Anyone can open an issue: https://github.com/MehmetSecgin/journal-default-skill/issues
+- Anyone can submit a pull request: https://github.com/MehmetSecgin/journal-default-skill/pulls
+
+Ask your agent to contribute with this prompt:
+
+```text
+Read this repo, propose one concrete improvement, open a GitHub issue describing the change, implement it in a branch, and open a PR with rationale and before/after behavior.
+```
+
 ## Quick Start (Any Agent)
 1. Clone this repo.
 2. Set optional memory path:
