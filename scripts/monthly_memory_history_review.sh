@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MEMORY_DIR="$HOME/.codex/memory"
+MEMORY_DIR="${MEMORY_ROOT:-$HOME/.codex/memory}"
 OUT_DIR="$MEMORY_DIR/domains/ops/reviews/history"
 WEEKLY_TRACKER="$MEMORY_DIR/domains/ops/reviews/_history_hygiene_cadence.md"
 

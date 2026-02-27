@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MEMORY_ROOT="$HOME/.codex/memory"
+MEMORY_ROOT="${MEMORY_ROOT:-$HOME/.codex/memory}"
 REVIEWS_DIR="$MEMORY_ROOT/domains/ops/reviews"
 TODAY="$(date +%F)"
 WEEK_ID="$(date +%G-W%V)"

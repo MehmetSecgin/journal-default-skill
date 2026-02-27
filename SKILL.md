@@ -12,13 +12,13 @@ description: Default scoped journaling workflow. Use for meaningful tasks to kee
 - Keep memory safe by default with redaction-first logging.
 
 ## Paths
-- Root: `~/.codex/memory/`
-- Domain indexes: `~/.codex/memory/domains/<domain>/index.md`
-- Sessions: `~/.codex/memory/domains/<domain>/sessions/`
-- Weekly reviews: `~/.codex/memory/domains/ops/reviews/`
-- Monthly history reviews: `~/.codex/memory/domains/ops/reviews/history/`
-- Templates: `~/.codex/memory/templates/`
-- Triage fallback: `~/.codex/memory/inbox/triage.md`
+- Memory root: `${MEMORY_ROOT}` if set, else `~/.codex/memory`
+- Domain indexes: `<memory_root>/domains/<domain>/index.md`
+- Sessions: `<memory_root>/domains/<domain>/sessions/`
+- Weekly reviews: `<memory_root>/domains/ops/reviews/`
+- Monthly history reviews: `<memory_root>/domains/ops/reviews/history/`
+- Templates: `<memory_root>/templates/`
+- Triage fallback: `<memory_root>/inbox/triage.md`
 
 ## Domain Routing
 Choose one domain per task:
