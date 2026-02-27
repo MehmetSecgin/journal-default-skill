@@ -1,0 +1,4 @@
+interface:
+  display_name: "Journal Default"
+  short_description: "Scoped journaling with redaction and cadence reviews."
+  default_prompt: "Use this skill to maintain concise domain-scoped journals, enforce redaction, and run weekly/monthly memory hygiene flows."
