@@ -33,14 +33,40 @@ Read this repo, propose one concrete improvement, open a GitHub issue describing
 1. Clone this repo.
 2. Set optional memory path:
 - `export MEMORY_ROOT=~/agent-memory`
+- or `export OBSIDIAN_MEMORY_ROOT=~/memory-root`
 3. Bootstrap storage:
 - `./scripts/bootstrap_memory.sh`
+  - add `--force` only when intentionally resetting baseline files
 4. Use policy docs:
 - `SKILL.md`
 - `UNIVERSAL_AGENT_PROMPT.md`
 5. Run periodic checks:
 - `./scripts/weekly_memory_review.sh`
 - `./scripts/monthly_memory_history_review.sh`
+6. Prefer deterministic session operations:
+- `./scripts/write_session.sh --domain engineering --title "..." --summary "..."`
+- `./scripts/check_index_consistency.sh`
+
+## Prerequisites
+- `bash`
+- `python3`
+- `rg` (ripgrep)
+- `git` (recommended for memory history checks/lint)
+- `obsidian-cli` (optional; used when available for vault discovery)
+
+## Update Skill From Repo
+When an agent is asked to "update the skill from its repo", run:
+1. `git fetch --all --prune`
+2. `git pull --ff-only`
+3. `bash -n scripts/*.sh`
+4. `./scripts/check_index_consistency.sh --help`
+5. Re-read `SKILL.md` and `UNIVERSAL_AGENT_PROMPT.md` and apply the new policy.
+
+If this repo is copied into another tool-specific skills folder, sync these files exactly:
+- `SKILL.md`
+- `UNIVERSAL_AGENT_PROMPT.md`
+- `references/domain-routing.md`
+- `scripts/*.sh`
 
 ## Files
 - `SKILL.md`: core policy
@@ -50,10 +76,14 @@ Read this repo, propose one concrete improvement, open a GitHub issue describing
 - `scripts/memory_lint.sh`: commit-blocking linter for memory repos
 - `scripts/weekly_memory_review.sh`: weekly review generator
 - `scripts/monthly_memory_history_review.sh`: monthly history hygiene report
+- `scripts/resolve_memory_root.sh`: shared memory-root resolver
+- `scripts/write_session.sh`: deterministic session write + index append
+- `scripts/check_index_consistency.sh`: verify/fix session index links
 
 ## Storage Path
 All scripts use `MEMORY_ROOT` when set.
-Fallback default is `~/.codex/memory`.
+Then `OBSIDIAN_MEMORY_ROOT` if set.
+Fallback default is `~/memory-root`.
 
 ## Codex-Specific Install
 Copy this folder into `$CODEX_HOME/skills/journal-default`.

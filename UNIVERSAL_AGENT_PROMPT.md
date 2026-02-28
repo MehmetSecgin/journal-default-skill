@@ -35,11 +35,14 @@ Do not journal pure chat, acknowledgements, navigation-only actions, or no-op ch
 - `Confidence: low|medium|high`
 
 ## Paths
-- Memory root: `${MEMORY_ROOT}` if set, else `~/.codex/memory`
-- Sessions: `${MEMORY_ROOT}/domains/<domain>/sessions/`
-- Domain index: `${MEMORY_ROOT}/domains/<domain>/index.md`
-- Weekly tracker: `${MEMORY_ROOT}/domains/ops/reviews/_cadence.md`
-- Monthly tracker: `${MEMORY_ROOT}/domains/ops/reviews/_history_hygiene_cadence.md`
+- Memory root: `${MEMORY_ROOT}` if set, else `${OBSIDIAN_MEMORY_ROOT}` if set, else `~/memory-root`
+- Use `<memory_root>` to refer to the resolved path above.
+- Sessions: `<memory_root>/domains/<domain>/sessions/`
+- Domain index: `<memory_root>/domains/<domain>/index.md`
+- Weekly tracker: `<memory_root>/domains/ops/reviews/_cadence.md`
+- Monthly tracker: `<memory_root>/domains/ops/reviews/_history_hygiene_cadence.md`
+
+If `obsidian-cli` is not installed and the user expects Obsidian-native vault operations, ask the user to install `obsidian-cli` first.
 
 ## Weekly Review Rule
 Due when `now_utc >= next_due_utc` in weekly tracker.

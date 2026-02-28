@@ -1,10 +1,53 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MEMORY_ROOT="${MEMORY_ROOT:-$HOME/.codex/memory}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MEMORY_ROOT="$("$SCRIPT_DIR/resolve_memory_root.sh")"
 NOW_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 NEXT_WEEK="$(date -u -v+7d +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '+7 days' +%Y-%m-%dT%H:%M:%SZ)"
 NEXT_MONTH="$(date -u -v+1m +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '+30 days' +%Y-%m-%dT%H:%M:%SZ)"
+FORCE=0
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  bootstrap_memory.sh [--force]
+
+Behavior:
+  - Creates baseline memory layout.
+  - By default, does not overwrite existing files.
+  - Use --force to overwrite managed baseline files.
+USAGE
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --force)
+      FORCE=1
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "bootstrap_memory: unknown arg: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+write_file() {
+  local path="$1"
+  local content="$2"
+  if [[ "$FORCE" -eq 0 && -f "$path" ]]; then
+    echo "skip_existing=$path"
+    return
+  fi
+  printf '%s\n' "$content" > "$path"
+  echo "wrote=$path"
+}
 
 mkdir -p "$MEMORY_ROOT/domains/engineering/sessions"
 mkdir -p "$MEMORY_ROOT/domains/personal/sessions"
@@ -14,27 +57,13 @@ mkdir -p "$MEMORY_ROOT/domains/general/sessions"
 mkdir -p "$MEMORY_ROOT/templates"
 mkdir -p "$MEMORY_ROOT/inbox"
 
-cat > "$MEMORY_ROOT/domains/engineering/index.md" <<'MD'
-# Engineering Memory Index
-MD
+write_file "$MEMORY_ROOT/domains/engineering/index.md" "# Engineering Memory Index"
+write_file "$MEMORY_ROOT/domains/personal/index.md" "# Personal Memory Index"
+write_file "$MEMORY_ROOT/domains/ops/index.md" "# Ops Memory Index"
+write_file "$MEMORY_ROOT/domains/general/index.md" "# General Memory Index"
+write_file "$MEMORY_ROOT/inbox/triage.md" "# Triage Inbox"
 
-cat > "$MEMORY_ROOT/domains/personal/index.md" <<'MD'
-# Personal Memory Index
-MD
-
-cat > "$MEMORY_ROOT/domains/ops/index.md" <<'MD'
-# Ops Memory Index
-MD
-
-cat > "$MEMORY_ROOT/domains/general/index.md" <<'MD'
-# General Memory Index
-MD
-
-cat > "$MEMORY_ROOT/inbox/triage.md" <<'MD'
-# Triage Inbox
-MD
-
-cat > "$MEMORY_ROOT/templates/session.md" <<'MD'
+write_file "$MEMORY_ROOT/templates/session.md" "$(cat <<'MD'
 # Session
 
 Date:
@@ -61,8 +90,9 @@ Observed Friction:
 Suggested Improvement:
 Confidence: low|medium|high
 MD
+)"
 
-cat > "$MEMORY_ROOT/domains/ops/reviews/_cadence.md" <<EOF2
+write_file "$MEMORY_ROOT/domains/ops/reviews/_cadence.md" "$(cat <<EOF2
 # Weekly Review Cadence Tracker
 
 cadence: weekly
@@ -73,8 +103,9 @@ last_review_note: [not set]
 status: active
 notes: Due when now_utc >= next_due_utc.
 EOF2
+)"
 
-cat > "$MEMORY_ROOT/domains/ops/reviews/_history_hygiene_cadence.md" <<EOF2
+write_file "$MEMORY_ROOT/domains/ops/reviews/_history_hygiene_cadence.md" "$(cat <<EOF2
 # Monthly History Hygiene Cadence Tracker
 
 cadence: monthly
@@ -85,5 +116,6 @@ last_review_note: [not set]
 status: active
 notes: Due when now_utc >= next_due_utc.
 EOF2
+)"
 
 echo "$MEMORY_ROOT"
